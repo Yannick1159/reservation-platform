@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Make New Reservation</h3>
+                </div>
+                <div class="card-body">
+                    {% for flash_message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ flash_message }}
+                        </div>
+                    {% endfor %}
+
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <form method="post" action="{{ path('app_reservation_create') }}">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" for="year">Year</label>
+                                <select name="year" id="year" class="form-control" aria-label="Select year">
+                                    {% for year in years %}
+                                        {% if year.isCurrent == true %}
+                                            <option value="{{ year.value }}" selected>{{ year.value }}</option>
+                                        {% else %}
+                                            <option value="{{ year.value }}">{{ year.value }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" for="month">Month</label>
+                                <select name="month" id="month" class="form-control" aria-label="Select month">
+                                    {% for month in months %}
+                                        {% if month.isCurrent == true %}
+                                            <option value="{{ month.value }}" selected>{{ month.value }}</option>
+                                        {% else %}
+                                            <option value="{{ month.value }}">{{ month.value }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" for="days">Days</label>
+                                <select name="days" id="days" class="form-control" aria-label="Select day">
+                                    {% for day in days %}
+                                        {% if day.isCurrent == true %}
+                                            <option value="{{ day.dayNumber }}" selected>{{ day.dayNumber }} - {{ day.dayName }}</option>
+                                        {% else %}
+                                            <option value="{{ day.dayNumber }}">{{ day.dayNumber }} - {{ day.dayName }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold" for="availableTimes">Available Times</label>
+                                <select name="availableTimes" id="availableTimes" class="form-control" aria-label="Select time">
+                                    {% for availableTime in availableTimes %}
+                                        {% if availableTime.available == true %}
+                                            <option value="{{ availableTime.time_start }}~{{ availableTime.time_end }}">{{ availableTime.time_start }} - {{ availableTime.time_end }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Make Reservation</button>
+                                <button type="button" class="btn btn-warning">Reset values</button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <p class="mb-0">You are not logged in. Please <a href="{{ path('app_login') }}" class="alert-link">click here</a> to sign in.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{#{% block stylesheets %}#}
+{#    {{ parent() }}#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.css">#}
+{#{% endblock %}#}
+
+{#{% block body %}#}
+{#    <div class="container">#}
+{#        <h1>Kalender</h1>#}
+{#        <div id="calendar"></div>#}
+{#    </div>#}
+{#{% endblock %}#}
+
+{#{% block javascripts %}#}
+{#    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>#}
+
+{#    {{ parent() }}#}
+{#    <script>#}
+{#        document.addEventListener('DOMContentLoaded', function() {#}
+{#            const calendarEl = document.getElementById('calendar');#}
+{#            const calendar = new FullCalendar.Calendar(calendarEl, {#}
+{#                initialView: 'dayGridMonth',#}
+{#                locale: 'nl',#}
+{#                headerToolbar: {#}
+{#                    left: 'prev,next today',#}
+{#                    center: 'title',#}
+{#                    right: 'dayGridMonth,timeGridWeek,timeGridDay'#}
+{#                },#}
+{#                events: [#}
+{#                    // Je kunt hier statische events toevoegen of later dynamisch laden via Ajax#}
+{#                ]#}
+{#            });#}
+{#            calendar.render();#}
+{#        });#}
+{#    </script>#}
+{#{% endblock %}#}
